@@ -1,0 +1,70 @@
+@Program written by Hamed Adefuwa
+@Written for my 1st year university module "Computer Systems Architecture"
+@Feel free to use this program as you wish
+@
+@Purpose of program:
+@Create an array
+@Populate it with int values: 24,18,35,47,60
+@Increment each value in the array by 1 for each loop
+@Loop through the program 5 times
+
+.data
+.equ SWI_Exit, 0 @ define SWI_Exit term as 0
+.balign 4
+return: .word 0
+array1: .skip 20 * 4 @ defining array of 20 positions, each position with 4 bytes
+
+.text
+.global main
+
+main: 
+ldr r3, =array1 @ address pointing to the beginning of the first array of numbers
+mov r10, r3 @ r10 works as backup for first array address
+
+@initialise 'i' to 0
+mov r2, #0 
+
+@store all values in arrays
+
+mov r9, #24
+str r9, [r3]   @ store the number at the memory position pointed by r3
+add r3, r3, #4 @ each number occupies 4 bytes
+mov r9, #18
+str r9, [r3] 
+add r3, r3, #4 
+mov r9, #35
+str r9, [r3] 
+mov r9, #47
+str r9, [r3] 
+add r3, r3, #4 
+mov r9, #60
+str r9, [r3]
+mov r3, r10 @reset r3 from backup
+mov r9, #0 @clear r9
+
+startover:
+
+
+@increment array values
+ldr r4, [r3]
+add r4, r4, #1
+str r4, [r3]
+add r3, r3, #4
+
+
+@setup loop for i = 0, if(i > 4), then exit
+@increment i & loop again
+
+cmp r2, #4 
+bgt exit
+add r2, r2, #1
+b startover
+
+
+ exit:
+swi SWI_Exit   
+
+        mov r7, #1 @ system call exit(1)
+        swi SWI_Exit
+
+return_addr: .word return
