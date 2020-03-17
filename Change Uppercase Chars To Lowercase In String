@@ -1,0 +1,41 @@
+@Program written by Hamed Adefuwa
+@Part of computer architecture university module
+@ ---------------------------------------------------------------------------------------------
+@
+@ 3. Assume the that you have an array of chars with the following sentence stored in it:
+@ 3.1. “Computer Architecture Module preparation questions\0”. This arrays ends with a null char.
+@ Implement an assembly program to convert each char from upper to lower case. 
+@ 
+@ My theory: load each character into a register and compare it to see if its below or over 91
+@ if under 91 then add 32
+@ if over 91, then skip and go to next position in array 
+@ use ldrb / strb.
+@ need to consider that the space character is below 91 so need to ignore it if its equal to 32
+@ ---------------------------------------------------------------------------------------------
+.data
+.balign 4
+string: .asciz "Computer Architecture Module preparation questions\0" @ String is an array of chars. It is stored in memory.
+return: .word 0
+
+.text
+.global main
+main:
+	ldr r0,=string		@load in the string 
+loop:
+	ldrb r9, [r0]		 
+	cmp r9, #0		@check for the null character
+	beq exit
+	cmp r9, #32		@check for spaces & skip
+	beq skip	
+	cmp r9, #91
+	blt add
+
+skip:
+	add r0, r0, #1
+	b loop		
+add:
+	add r9, #32
+	strb r9, [r0]
+	b skip
+exit:
+	swi 0
