@@ -1,0 +1,36 @@
+@Program written by Hamed Adefuwa
+@Part of computer architecture university module
+
+.data
+.balign 4
+return: .word 0
+
+
+.text
+.global main
+@ ---------------------------------------------------------------------------------------------
+@
+@Implement a program in assembly that uses a loop structure to calculate 5! (5 factorial). For example,
+@5! = 5 * 4 * 3 * 2 * 1 = 120. 
+@
+@  int i;
+@  long r = 1;
+@
+@  for (i = 1; i <= 5; i++)
+@    r = r * i;
+@ 
+@ ---------------------------------------------------------------------------------------------
+main: 
+
+	mov r0, #1 		@ r = 1;
+	mov r1, #1		@ i = 1;
+	mov r2, #5		@ 5 - the number we want to find its factorial for
+do:
+
+	mul r0, r1		@ r = r * i;
+	add r1, #1		@ i++
+	cmp r2, r1		@ is i == 5?
+	blt exit		@ if yes, exit
+	b do			@ redo loop 
+exit:
+	swi 0			@exit
