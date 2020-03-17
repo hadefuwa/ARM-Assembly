@@ -1,0 +1,39 @@
+@ Program written by Hamed Adefuwa
+@ Part of computer architecture university module
+@ ---------------------------------------------------------------------------------------------
+@ Program
+@ 3. Assume the that you have an array of chars with the following sentence stored in it:
+@ “Computer Architecture Module preparation questions\0”, count
+@ the number of spaces.
+@ 
+@ My theory: load each character into a register and compare it to 0
+@ if 32 increment counter 
+@ if !32 loop around again
+@ if 0 (null) exit program
+@ 
+@ ---------------------------------------------------------------------------------------------
+.data
+.balign 4
+string: .asciz "Computer Architecture Module preparation questions\0" @ String is an array of chars. It is stored in memory.
+return: .word 0
+
+.text
+.global main
+main:
+	ldr r0,=string		@ load the string into r0
+	mov r1, #0 		@ counter for number of spaces
+loop:
+	ldrb r9, [r0]		@ load the first byte of the string into r9
+	cmp  r9, #32		@ compare it to 32 a.k.a the space character
+	beq increment		@ branch to increment label
+	cmp  r9, #0		@ compare it to 0 a.k.a the null character
+	beq exit		@ branch to skip label
+	b skip			@ otherwise exit
+
+increment:
+	add r1, #1		@ increment counter for number of spaces
+skip:
+	add r0, #1		@ move to next character in string		
+	b loop
+exit:
+	swi 0
