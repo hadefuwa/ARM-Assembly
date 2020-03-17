@@ -1,0 +1,20 @@
+@Hamed Adefuwa
+
+.data      @ "data area"
+.balign 4  @ byte alignment due to memory
+char: .asciz "A"
+return: .word 0
+
+.text @ instruction area
+.global main @ main function present in any program
+
+main:
+
+  ldr R1, =char @ =char is the memory location address where the char stored
+  ldr R9, [r1]
+  add R9, R9, #1
+  strb R9, [r1]
+  swi 0      
+
+
+return_addr:	.word return
