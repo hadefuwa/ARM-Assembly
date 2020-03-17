@@ -1,0 +1,114 @@
+@Program written by Hamed Adefuwa
+@Part of computer architecture university module
+
+@Set array a[i] with the following decimal values {27, 14, 3, 59, 60} and and b[i] with {7, 3, 4, 9, 12}.
+@i = 0;
+@do {
+@ c[i] = a[i] + 2*b[i];
+@ i ++ ;
+@} while (i < 5) ;
+
+
+.data
+.balign 4
+return: .word 0
+arrayA: .skip 20 * 4 @ defining array of 20 positions, each position with 4 bytes
+arrayB: .skip 20 * 4 @ defining array of 20 positions, each position with 4 bytes
+arrayC: .skip 20 * 4 @ defining array of 20 positions, each position with 4 bytes
+
+.text
+.global main
+@ ---------------------------------------------------------------------------------------------
+main: 
+ldr r3, =arrayA @ address pointing to the beginning of the first array of numbers
+mov r10, r3 @ r10 works as backup for array A address
+ldr r4, =arrayB @ address pointing to the beginning of the first array of numbers
+mov r11, r4 @ r11 works as backup for array B address
+ldr r2, =arrayC @ address pointing to the beginning of the first array of numbers
+mov r12, r2 @ r12 works as backup for array C address
+
+@ ---------------------------------------------------------------------------------------------
+@store all values in array A {27, 14, 3, 59, 60} 
+
+mov r9, #27
+str r9, [r3]   @ store the number at the memory position pointed by r3
+add r3, r3, #4 @ move 4 positions as each number occupies 4 bytes
+mov r9, #14
+str r9, [r3] 
+add r3, r3, #4 
+mov r9, #3
+str r9, [r3]
+add r3, r3, #4  
+mov r9, #59
+str r9, [r3] 
+add r3, r3, #4 
+mov r9, #60
+str r9, [r3]
+@finished initialising array A
+
+mov r3, r10 @reset r3 from backup
+mov r9, #0 @clear r9 as this register was just used for storing and will be used for next array
+@ ---------------------------------------------------------------------------------------------
+
+@ ---------------------------------------------------------------------------------------------
+@store all values in array B {7, 3, 4, 9, 12}.
+
+mov r9, #7
+str r9, [r4]   @ store the number at the memory position pointed by r4
+add r4, r4, #4 @ move 4 positions as each number occupies 4 bytes
+mov r9, #3
+str r9, [r4] 
+add r4, r4, #4 
+mov r9, #4
+str r9, [r4]
+add r4, r4, #4  
+mov r9, #9
+str r9, [r4] 
+add r4, r4, #4 
+mov r9, #12
+str r9, [r4]
+@finished initialising array B
+
+mov r4, r11 @reset r4 from backup
+mov r9, #0 @clear r9 again
+
+@ ---------------------------------------------------------------------------------------------
+
+@initialise i,a,b,c
+
+mov r8, #0 @i = 0
+mov r5, #0 @a = 0
+mov r6, #0 @b = 0
+mov r7, #0 @c = 0
+
+
+@ ---------------------------------------------------------------------------------------------
+
+@Correct
+
+do: @the loop part of the program
+
+ldr r5,[r3] @set a to first/next position of arrayA
+ldr r6,[r4] @set b to first/next position of arrayB
+ldr r7,[r2] @set c to first/next position of arrayC
+add r6, r6, r6 @b + b = 2b
+add r7, r5, r6 @c = a + 2b
+
+@ ---------------------------------------------------------------------------------------------
+
+@store C into r2
+str r7, [r2]
+
+@ ---------------------------------------------------------------------------------------------
+
+@Correct
+add r3, r3, #4 @move a to next position in array
+add r4, r4, #4 @move b to next position in array
+add r2, r2, #4 @move c to next position in array 
+
+add r8, r8, #1 @i++
+cmp r8, #5 @is i == 5?
+blt do @go back to do if < 5
+
+
+SWI 0
