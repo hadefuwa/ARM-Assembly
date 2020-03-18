@@ -1,0 +1,53 @@
+@Program written by Hamed Adefuwa
+@Part of computer architecture university module
+@ ---------------------------------------------------------------------------------------------
+@
+@ 3. Assume the that you have an array of chars with the following sentence stored in it:
+@ 3.1. “Computer Architecture Module preparation questions\0”. This arrays ends with a null char.
+@ Implement an assembly program to invert the order of the chars. As a result of the sentence
+@ you should see: snoitseuq noitaraperp eludoM erutcetuhcrA retupmoC.  
+@ 
+@ ---------------------------------------------------------------------------------------------
+.data
+.balign 4
+array1: .asciz "Computer Architecture Module preparation questions\0"
+array2: .asciz "Computer Architecture Module preparation questions\0" 
+return: .word 0
+
+.text
+.global main
+main:
+	mov r10, #0 		@int counter = 0;
+	ldr r0,=array1		@load main string
+	ldr r1,=array2		@load reverse string
+	mov r6, r0		@backup of main string first position	
+
+counter:
+	ldrb r2, [r0]		@load in first value of the array
+	cmp r2, #0		@search for null character
+	beq stopcounting	@if at end of the string break loop
+	add r10, #1		@counter++
+	add r0, #1		@move to next char in array
+	b counter		@loop again
+
+stopcounting:			@at this point the program has counted the number of characters in the string
+	
+	sub r0, #1		@move r0 back one from the null counter
+	mov r9, r10		@int totalchars = counter - 1;
+	mov r8, #0		@int j = 0;
+
+swap:				@loop to swap characters
+	
+	ldrb r3, [r0]		@load last letter of first array into r3
+	strb r3, [r1]		@store letter back into r1
+
+	sub r9, #1		@decrement second counter from string length to 0xffffffff
+	add r1, #1		@move to next position in array2
+	sub r0, #1		@decrement r0 to move backwards from end of array1 to the beggining
+	cmp r9, #0xffffffff	@has r9 finished counting backwards
+	beq exit 		@if the same, exit program 
+	b swap			@otherwise, loop again				
+
+exit:
+	swi 0
+
