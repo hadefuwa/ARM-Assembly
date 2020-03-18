@@ -11,7 +11,7 @@
 .data
 .balign 4
 array1: .asciz "Computer Architecture Module preparation questions\0"
-array2: .asciz "Computer Architecture Module preparation questions\0" 
+array2: .asciz ""
 return: .word 0
 
 .text
