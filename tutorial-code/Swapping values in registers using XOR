@@ -1,0 +1,13 @@
+@Swapping values in registers using XOR
+
+.global main
+
+main:
+	ldr r0,=0xBABE
+	ldr r1,=0xDEAD
+
+	eor r0,r0,r1 
+	eor r1,r0,r1 
+	eor r0,r0,r1  
+
+	swi 0
