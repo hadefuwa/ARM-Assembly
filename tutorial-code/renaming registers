@@ -1,0 +1,17 @@
+@ --Renaming registers-- 
+
+val1 .req R1 @ <<<<<
+val2 .req R2 @ <<<<<
+SUM .req R3 @ <<<<<
+
+.global main
+
+@ --Using the renamed registers-- 
+main:
+	mov val1, #55
+	mov val2, #5
+	add sum, val1, val2
+
+@exit
+	mov r7, #1
+	svc 0
