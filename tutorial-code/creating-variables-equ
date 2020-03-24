@@ -1,0 +1,19 @@
+@ Program to create variables as letters and use them in subtraction
+
+        .equ        A,99 @ A = 99
+        .equ        C,66 
+        .equ        D,1 
+
+         .global main
+
+main:
+        MOV     R1,#A	@R1 = A, # sign is needed as letter represents numbers
+        MOV     R2,#C 
+        MOV     R3,#D
+
+        SUB     R0,R1,R2
+        SUB     R0,R0,R3
+
+        MOV     R7,#1
+        SVC     0
+        .end
