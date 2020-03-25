@@ -1,0 +1,29 @@
+@ Floating Point Numbers
+@ prefix commands with the letter v
+@ vldr
+@ vmov
+@ vadd
+@ vsub
+@ when using add and sub then suffix the operand with .f32 for floating point 32bit
+@ floating point registers use s instead of r
+@ s stands for scalar registers
+
+.data
+.equ SWI_Exit, 0
+.balign 4
+return: .word 0
+
+.text
+.global main
+main:
+    @ldr is used as compilers have problems with large numbers
+vldr s11,=0x3dae147b @ s11 = 0.085
+vldr s13, =0x42c3a000 @ s13 = 97.8125
+vldr s14, =0x3e400000 @ s14 = 0.1875
+        vmov s13, r9            
+        vmov s14, r10
+        vmov s11, r11
+    vadd.f32    s16, s13, s14
+    vsub.f32    s12, s13, s11
+        mov r7, #1 @ system call exit(1)
+        swi SWI_Exit
