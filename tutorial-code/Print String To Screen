@@ -1,0 +1,24 @@
+
+@ Program to print a string to screen
+@ R0 - output stream device (1 for screen)
+@ R1 - what will be printed
+@ R2 - # of characters
+@ R7 - what type of printing (4 for writing)
+@ Note:When printing R0 will take the return value of printf
+
+.text
+.global main
+main:
+    ldr r1, =message @ load the string into r1, r1 is the register who's value gets printed
+    mov r2, #12 @ r2 holds the number of characters to be printed
+    mov r7, #4 @ system call to write
+    mov r0, #1 @ system call to select monitor as output stream
+    swi 0 @ call software interupt to print
+
+    mov r7, #1 @ make r7 1 for program exit
+    swi 0
+
+.data
+message:
+    .asciz "Hello World\n" @ string to be printed
+
