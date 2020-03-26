@@ -1,0 +1,36 @@
+@ Program to ask for users name, take input from keyboard 
+@ and then print it back to screen
+
+	.global main
+	main:
+
+	requestname:
+		MOV R7, #4 @ Syscall to output to screen
+		MOV R0, #1 @ Output to monitor
+		MOV R2, #50	@ # of characters to write
+		LDR R1, =message @ Print string in message
+		SWI 0
+
+	write:
+		MOV R7, #3 @ Syscall read from keyboard
+		MOV R0, #0 @ Input stream keyboard
+		MOV R2, #50 @ Read 50 characters
+		LDR R1, =name @ Put string in message
+		SWI 0
+		
+	printname:	
+		MOV R7, #4 @ Syscall to output to screen
+		MOV R0, #1 @ Output to monitor
+		MOV R2, #50	@ # of characters to write
+		LDR R1, =name @ Print string in message
+		SWI 0
+		
+	end:
+		MOV R7, #1
+		SWI 0
+		
+	.data
+	message:
+		.ascii "Enter Your Name: "
+	name:
+		.ascii " "
