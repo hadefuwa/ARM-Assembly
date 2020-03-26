@@ -1,0 +1,16 @@
+@ printing a number, requires printing it as a string and using printf from C 
+.global main
+
+main:
+	LDR R0, =string
+	LDR R1, =#1992 /*Output number*/
+	BL printf
+	B exit
+
+exit:
+	MOV R7, #1
+	SWI 0
+
+.data
+string:
+        .asciz "%d\n"
