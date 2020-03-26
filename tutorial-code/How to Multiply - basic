@@ -1,0 +1,13 @@
+@ Program to multiply two numbers
+@ important point to remember with multiply:
+@ you cannot multiply constants, you need to multiply registers
+@ meaning numbers should be stored in registers first.
+
+	.global main
+	main:
+
+	MOV R1, #0x14 @ Put 20 in R1
+	MOV R2, #0xA @ Put 10 in R2
+	MUL R0, R1, R2 @ Multiply 20 * 10, store in R0
+	MOV R7, #1 @ Exit with a system call
+	SWI 0 @ End program and return to terminal
