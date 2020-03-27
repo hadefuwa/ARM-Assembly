@@ -1,0 +1,84 @@
+@ Program Edited By Hamed Adefuwa
+
+@ The program initialises two arrays with three variables each
+@ array1 = 28, 4, 46
+@ array2 = 8, 25, 21
+@ The program then performs a subtraction on each element, subtracting each element of array2 from the corresponding element in array1 (array1-array2)
+@ The result of the subtraction is stored over array1's elements
+
+.data  @ this defines the data area where data resides. This is a directive that tells the assembler to emit the entities in the data section
+.equ SWI_Exit, 0 @ define SWI_Exit term as 0 
+.balign 4 @ byte alignment due to memory, ensures that the next address will start on a 4-byte boundary
+return: .word 0 @ place for return address of main - the .word directive makes the assembler emit 4 bytes containing the value 0. 
+array1: .skip 10 * 4 @ defining array of 10 positions, each position with 4 bytes 
+array2: .skip 10 * 4 @ defining array of 10 positions, each position with 4 bytes 
+
+.text @ similar to the .data section, but for code. The code for the program goes in this area.
+
+.global main @ defining main 'function' label as global
+
+main: 
+        @ –-------------------------------------------begin first part
+        ldr r3, =array1	@ address pointing to the beginning of the first array of numbers 
+			@ this code will be transformed to ldr r3, [PC+offset]]; offset
+    			@ in bytes will depend on the amount of variables allocated
+        ldr r4, =array2 @ address pointing to the beginning of the second array
+			@ this code will be transformed to ldr r4, [PC+offset1]]; offset1
+    			@ in bytes will depend on the amount of variables allocated
+
+@ initialise first array (array1)
+
+        mov r10, r3     @ saves r10 for further use as a backup
+        mov r11, r4     @ saves r11 for further use as a backup
+        mov r9, #0x1C	@ place #28 into r9
+        str r9, [r3]    @ store the value at r9, which is #28, into the memory address r3 points to, which is the first element in array1
+        add r3, r3, #4  @ r3 = r3 + 4 - which means moving to the next element in the array (4 bytes away)
+        mov r9, #0x4 	@ r9 = #4
+        str r9, [r3]    @ store the value at r9, which is #4, into the memory address r3 points to, which is now the second element in array1
+        add r3, r3, #4  @ move to third element in array1
+        mov r9, #0x2E	@ r9 = #46
+        str r9, [r3]    @ store #46 in the third element of array1
+
+@ initialise second array (array2)
+
+        mov r9, #0x8	@ put #8 into r9
+        str r9, [r4]    @ store the value at r9, which is #8, into the memory address r4 points to, which is the first element in array2
+        add r4, r4, #4  @ move to next element in array2
+        mov r9, #0x19 	@ put #25 into r9
+        str r9, [r4]    @ store #25 into the second element in array2
+        add r4, r4, #4  @ move to next element in array2
+        mov r9, #0x15   @ put #21 into r9
+        str r9, [r4]    @ store #21 into the third element in array2
+       @ –--------------------------------------------- end first part
+        mov r3, r10     @ resets r3 back to the first position of the array, by restoring the backup from r10
+        mov r4, r11  	@ resets r4 back to the first position of the array, by restoring the backup from r11
+
+        ldr r0, [r3]        	@ load the first element of array1 into r0
+        ldr r1, [r4]        	@ load the first element of array2 into r1 @ instruction 1: after executing this instruction inspect r3 related memory location        
+        sub r6, r0, r1 		@ r6 = array1[0] - array2[0]		(r6 = 28-8)
+        str r6, [r3]        	@ store result (#20) into array1[0]
+        ldr r0, [r3]       	@ load the memory address of array1[0] into r0 so we can inspect its contents
+        add r3, r3, #4 		@ move r3 to the next position in array1 @ instruction 2: after executing this instruction, inspect r3 related memory location
+        add r4, r4, #4 		@ move r4 to the next position in array2
+
+        ldr r0, [r3] 		@ load the second element of array1 into r0
+        ldr r1, [r4] 		@ load the second element of array2 into r1
+        sub r6, r0, r1 		@ r6 = array1[1] - array2[1]		(r6 = 4-25)
+       	str r6, [r3]   		@ store result (#-21) into array1[1]
+        ldr r0, [r3]      	@ load the memory address of array1[1] into r0
+
+        add r3, r3, #4 		@ move r3 to the next position in array1
+        add r4, r4, #4 		@ move r4 to the next position in array2
+        ldr r0, [r3] 		@ load the third element of array1 into r0
+        ldr r1, [r4] 		@ load the third element of array2 into r1
+        sub r6, r0, r1 		@ r6 = array1[2] - array2[2]		(r6 = 46-21)
+        str r6, [r3]   		@ store result (#25) into array1[2]
+        ldr r0, [r3]      	@ load the memory address of array1[2] into r0 
+
+        swi SWI_Exit   
+
+        mov r7, #1 @ system call exit(1) 
+        swi SWI_Exit 
+
+
+
